@@ -10,14 +10,19 @@ package core.baseComponent
 	{
 		private var viewArr:Array;
 		private var currentPage:int = 0;
-		public function LoopAtlas(_viewArr:Array)
+		private var canClick:Boolean;
+		private var SCREEN_WIDTH:int = 1920;
+		private var autoMove:Boolean;
+		public function LoopAtlas(_viewArr:Array,_autoMove:Boolean = true)
 		{
 			super();
 			
 			viewArr = _viewArr;
+			autoMove = _autoMove;
 			len = viewArr.length;
 			viewContain = new Sprite();
 			addChild(viewContain);
+			
 			init();
 		}
 		private var viewContain:Sprite;
@@ -29,6 +34,7 @@ package core.baseComponent
 		private var rightIndex:int;
 		private var manger:Array;
 		private var dataViewArr:Array;
+		private var timer:Timer;
 		private function init():void
 		{
 			manger = new Array();
@@ -38,19 +44,36 @@ package core.baseComponent
 			
 			dataViewArr = new Array();
 			
-			timer.addEventListener(TimerEvent.TIMER,autoMove);
-			timer.start();
+			if(autoMove)
+			{
+				timer = new Timer(1000 * 7);
+				timer.addEventListener(TimerEvent.TIMER,autoMoveHandler);
+				timer.start();
+			}
 			getView();
 		}
 		private var dir:int = -1;
-		private function autoMove(event:TimerEvent):void
+		private var isMoving:Boolean =false;
+		private function autoMoveHandler(event:TimerEvent):void
 		{
-			var endX:int = viewContain.x + 1494 * dir;
-			for each(var view:Sprite in manger)
-			{
-//				endX = view.x + dir * view.width;
-			}
-				TweenLite.to(viewContain,.4,{x:endX,onComplete:moveOver});
+			isMoving = true;
+			var endX:int = viewContain.x + SCREEN_WIDTH * dir;
+			TweenLite.to(viewContain,.4,{x:endX,onComplete:moveOver});
+		}
+		public function next():void
+		{
+			if(isMoving) return;
+		trace("before timer.runing = ",timer.running);
+			if(timer) timer.stop();
+			trace("after timer.runing = ",timer.running);
+			autoMoveHandler(null);
+		}
+		public function prev():void
+		{
+			if(isMoving) return;
+			if(timer) timer.stop();
+			dir = 1;
+			autoMoveHandler(null);
 		}
 		private function moveOver():void
 		{
@@ -69,6 +92,7 @@ package core.baseComponent
 			}else{//right
 				
 			}
+			dir = -1;
 			getView();
 		}
 		private function getView():void
@@ -96,20 +120,26 @@ package core.baseComponent
 			
 			reLayout();
 		}
-		private var timer:Timer = new Timer(1000 * 4);
+//		private 
 		private function reLayout():void
 		{
 			viewContain.x = 0;
 			var n:int = - 1;
-			for each(var view:Sprite in dataViewArr)
+			for each(var view:CImage in dataViewArr)
 			{
-				view.x = n * 1494;
+				view.x = n * SCREEN_WIDTH;
 				viewContain.addChild(view);
 				n++;
 			}
 			while(viewContain.numChildren  > 3)
 			{
 				viewContain.removeChildAt(0);
+			}
+			isMoving = false;
+			if(!timer.running)
+			{
+				timer.start();
+				trace("restart timer.runing = ",timer.running);
 			}
 		}
 	}

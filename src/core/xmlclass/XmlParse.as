@@ -1,8 +1,6 @@
 package core.xmlclass
 {
 	
-	import flash.net.getClassByAlias;
-	import flash.net.registerClassAlias;
 	import flash.utils.getDefinitionByName;
 	/**
 	 *解析XM 

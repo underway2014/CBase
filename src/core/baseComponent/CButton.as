@@ -17,21 +17,25 @@ package core.baseComponent
 		public var data:*;//存放按钮数据
 		private var centerZoom:Boolean = true;
 		private var isStateChange:Boolean;	//是否支持各种状态间切换
+		private var isSelect:Boolean;
 		private var _bgWidth:int;
 		/**
 		 * 
 		 * @param arg 按钮皮肤地址//正常，点击，按钮上的文字图片
 		 * 
 		 */		
-		public function CButton(arg:Array, centerZoom:Boolean = true, isSelect:Boolean = true,_isStateChange:Boolean = false)
+		public function CButton(arg:Array, centerZoom:Boolean = true, _isSelect:Boolean = true,_isStateChange:Boolean = false)
 		{
 			super();
 			urlArr = arg;
 			isStateChange = _isStateChange;
+			isSelect = _isSelect;
 			this.centerZoom = centerZoom;
 			currentState = normalState;
 			this.addChild(normalState);
 			this.addChild(clickState);
+			alphaBtn = new Sprite();
+			this.addChild(alphaBtn);
 			//有时只需要两张图片
 			if(arg.length>2)
 			{
@@ -55,6 +59,7 @@ package core.baseComponent
 			{
 				this.addEventListener(MouseEvent.MOUSE_DOWN,clickHandler);
 				this.addEventListener(MouseEvent.MOUSE_UP,upHandler);
+				this.addEventListener(MouseEvent.MOUSE_OUT,outHandler);
 			}
 			this.buttonMode = true;
 			
@@ -65,6 +70,7 @@ package core.baseComponent
 		private var overState:Sprite=new Sprite;
 		private var clickState:Sprite = new Sprite;
 		private var txtSprite:Sprite = new Sprite;
+		private var alphaBtn:Sprite;
 		private var i:int;
 		private function loadOkHandler(event:Event):void
 		{
@@ -82,11 +88,15 @@ package core.baseComponent
 				if(i<urlArr.length)
 					txtSprite.addChild(loader._loaderContent[i]);
 				
+				alphaBtn.graphics.beginFill(0xaaffff,.2);
+				alphaBtn.graphics.drawRect(0,0,loader._loaderContent[0].width,loader._loaderContent[0].height);
+				alphaBtn.graphics.endFill();
+				
 				if (centerZoom)
 				{
 					i = 0;
-					loader._loaderContent[i].x = -loader._loaderContent[i].width/2;
-					loader._loaderContent[i].y = -loader._loaderContent[i].height/2;
+					alphaBtn.x = loader._loaderContent[i].x = -loader._loaderContent[i].width/2;
+					alphaBtn.y = loader._loaderContent[i].y = -loader._loaderContent[i].height/2;
 					
 					i++;
 					if(urlArr.length>i)
@@ -111,7 +121,6 @@ package core.baseComponent
 		}
 		private function overHandler(event:Event):void
 		{
-			trace("over===");
 			if(currentState!=overState)
 			{
 				currentState.visible = false;
@@ -121,11 +130,14 @@ package core.baseComponent
 		}
 		private function outHandler(event:MouseEvent):void
 		{
-			if(currentState!=normalState&&currentState!=clickState)
+			if(currentState!=normalState)
 			{
-				currentState.visible = false;
-				currentState = normalState;
-				currentState.visible = true;
+				if(currentState!=clickState || !isSelect)
+				{
+					currentState.visible = false;
+					currentState = normalState;
+					currentState.visible = true;
+				}
 			}
 		}
 		private function downHandler(event:MouseEvent):void
