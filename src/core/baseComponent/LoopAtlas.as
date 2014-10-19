@@ -63,9 +63,7 @@ package core.baseComponent
 		public function next():void
 		{
 			if(isMoving) return;
-		trace("before timer.runing = ",timer.running);
 			if(timer) timer.stop();
-			trace("after timer.runing = ",timer.running);
 			autoMoveHandler(null);
 		}
 		public function prev():void
@@ -74,6 +72,11 @@ package core.baseComponent
 			if(timer) timer.stop();
 			dir = 1;
 			autoMoveHandler(null);
+		}
+		public function gotoPage(index:int):void
+		{
+			currentPage = index;
+			getView();
 		}
 		private function moveOver():void
 		{
@@ -136,7 +139,7 @@ package core.baseComponent
 				viewContain.removeChildAt(0);
 			}
 			isMoving = false;
-			if(!timer.running)
+			if(timer && !timer.running)
 			{
 				timer.start();
 				trace("restart timer.runing = ",timer.running);
