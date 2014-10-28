@@ -128,7 +128,7 @@ package core.baseComponent
 		{
 			viewContain.x = 0;
 			var n:int = - 1;
-			for each(var view:CImage in dataViewArr)
+			for each(var view:Sprite in dataViewArr)
 			{
 				view.x = n * SCREEN_WIDTH;
 				viewContain.addChild(view);

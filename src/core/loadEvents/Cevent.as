@@ -29,6 +29,11 @@ package core.loadEvents
 		public static const DISK_BACK_SECSTEP_OVER:String = "diskbackoneover";
 		
 		/**
+		 * 页面初始完成
+		 */
+		public static const PAGEINIT_COMPLETE:String = "pageinit_complete";
+		
+		/**
 		 *清空DM，或全攻略内容
 		 *  
 		 */		

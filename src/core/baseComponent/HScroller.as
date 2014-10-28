@@ -25,7 +25,7 @@ package core.baseComponent
 		
 		private var sliderSprite:Sprite = new Sprite;
 		private var shape:Shape;
-		
+		private var _barX:int;
 		private var isShowBar:Boolean = true;
 		/**
 		 * 
@@ -40,7 +40,7 @@ package core.baseComponent
 			maskWidht = _maskwidth;
 			maskHeight = _maskheight;
 			
-			this.addChild(barSprite);
+			
 			barSprite.x = maskWidht;
 			
 			shape = new Shape();
@@ -66,6 +66,18 @@ package core.baseComponent
 			//			this.addEventListener(MouseEvent.MOUSE_UP,stopdragHandler);
 		}
 		private var dragMask:Sprite;
+
+		public function get barX():int
+		{
+			return _barX;
+		}
+
+		public function set barX(value:int):void
+		{
+			_barX = value;
+			barSprite.x = value;
+		}
+
 		/**
 		 *滑块拖动 
 		 * @param event
@@ -85,14 +97,15 @@ package core.baseComponent
 		private var barslider:DisplayObjectContainer;
 		private function bgOkHandler(event:Event):void
 		{
-			loader._loaderContent[1].height = maskHeight;
+			barSprite.y = (maskHeight - loader._loaderContent[1].height) / 2;
+//			loader._loaderContent[1].height = maskHeight;
 			barSprite.addChild(loader._loaderContent[1]);
 			sliderSprite.addChild(loader._loaderContent[0]);
-			loader._loaderContent[0].x = -4;
+			loader._loaderContent[0].x = -1;
 			barSprite.addChild(sliderSprite);
-			sliderSprite.addEventListener(MouseEvent.MOUSE_DOWN,barStartDragHandler);
-			sliderSprite.addEventListener(MouseEvent.MOUSE_UP,barStopDragHandler);
-			sliderSprite.addEventListener(MouseEvent.MOUSE_OUT,barStopDragHandler);
+//			sliderSprite.addEventListener(MouseEvent.MOUSE_DOWN,barStartDragHandler);
+//			sliderSprite.addEventListener(MouseEvent.MOUSE_UP,barStopDragHandler);
+//			sliderSprite.addEventListener(MouseEvent.MOUSE_OUT,barStopDragHandler);
 			//			barslider = loader._loaderContent[0];
 		}
 		
@@ -111,7 +124,7 @@ package core.baseComponent
 			}
 			//			
 			//			barslider.y = Math.abs(_target.y-objY)/(_target.height-maskHeight)*(maskHeight-barslider.height);
-			sliderSprite.y = Math.abs(_target.y-objY)/(_target.height-maskHeight)*(maskHeight-sliderSprite.height);
+			sliderSprite.y = Math.abs(_target.y-objY)/(_target.height-maskHeight)*(barSprite.height - sliderSprite.height);
 			
 			
 		}
@@ -132,6 +145,7 @@ package core.baseComponent
 			_target.addEventListener(MouseEvent.MOUSE_UP,stopdragHandler);
 			//			_target.addEventListener(MouseEvent.MOUSE_OUT,stopdragHandler);
 			this.addChild(_target);
+			this.addChild(barSprite);
 			this.addChild(dragMask);
 			_target.mask = shape;
 			
