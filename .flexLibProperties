@@ -3,6 +3,7 @@
   <includeClasses>
     <classEntry path="core.baseComponent.CDrag"/>
     <classEntry path="core.baseComponent.AutoMove"/>
+    <classEntry path="core.interfaces.PageClear"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
