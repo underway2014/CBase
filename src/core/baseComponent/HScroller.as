@@ -199,6 +199,12 @@ package core.baseComponent
 		public function reset():void
 		{
 			sliderSprite.y = _target.y = 0;
+			if(target.height <= maskHeight)
+			{
+				barSprite.visible = false;
+			}else{
+				barSprite.visible = true;
+			}
 		}
 	}
 }
