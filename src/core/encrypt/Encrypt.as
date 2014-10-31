@@ -14,12 +14,9 @@ package core.encrypt
 	import flash.net.FileReference;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
-	import flash.net.NetStreamAppendBytesAction;
 	import flash.net.URLLoader;
-	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.URLStream;
-	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
